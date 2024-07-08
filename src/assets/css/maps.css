@@ -1,0 +1,9 @@
+.maps-filter li.button-container {
+    width: fit-content;
+    height: 50px;
+    min-height: inherit; }
+  .maps-filter li.button-container {
+    height: auto; }
+    .maps-filter li.button-container div {
+      margin-bottom: 5px;
+      padding: 10px; }
