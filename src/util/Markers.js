@@ -1,4 +1,5 @@
 
+
 // 마커 생성 함수
 export const createMarker = (mapRef, location, icon = null) => {
   const marker = new naver.maps.Marker({
@@ -65,3 +66,17 @@ export const updateMarkers = (map, markers) => {
     }
   }
 };
+
+const ALL = 63;
+
+// 마커 필터링 함수
+export const filterMarkers = (filter, markersRef, markers) => {
+  
+  // 필터 미적용 시, 전체 마커 표시
+  if (filter == 0) filter = ALL;
+
+  for (let i = 0; i < markersRef.length; i += 1) {
+    if (filter >> markersRef[i].type) 
+      markers.push(markersRef[i]);
+  }
+}
