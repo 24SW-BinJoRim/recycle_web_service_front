@@ -7,82 +7,92 @@ import { Row, Col, Card, CardHeader, CardBody } from "reactstrap";
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useGeolocation from "hooks/useGeolocation";
 import { createMarker, createInfoWindow, updateMarkers, filterMarkers } from "util/Markers";
 import { loadData } from "util/Data";
 
 // marker options
-import user_marker from "assets/img/maps_user_marker.png";
+import user_marker from "assets/img/maps_user_marker_nav_32.png";
 import marker_orange from "assets/img/maps_marker_orange_32.png";
 import marker_yellow from "assets/img/maps_marker_yellow_32.png";
 import marker_blue from "assets/img/maps_marker_blue_32.png";
 
-const MapWrapper = () => {
+function FullScreenMap() {
   const mapRef = useRef(null);
   const { naver } = window;
   const { currentMyLocation } = useGeolocation();
   
   const data = loadData();
-  const markersRef = [];
   const markers = [];
   const markerOpts = [ user_marker, marker_orange, marker_yellow, marker_blue ];
-  const filter = 0;
-  const btns = [];
-  
-  useEffect(() => {
-    if (currentMyLocation.lat !== 0 && currentMyLocation.lng !== 0) {
-      const mapOptions = {
-        center: new naver.maps.LatLng(currentMyLocation.lat, currentMyLocation.lng),  // 지도의 초기 중심 좌표
-        logoControl: false,     // 네이버 로고 표시 X
-        mapDataControl: false,  // 지도 데이터 저작권 컨트롤 표시 X
-        scaleControl: true,     // 지도 축척 컨트롤의 표시 여부
-        tileDuration: 200,      // 지도 타일을 전환할 때 페이드 인 효과의 지속 시간(밀리초)
-        zoom: 17,               // 지도의 초기 줌 레벨
-        zoomControl: true,      // 줌 컨트롤 표시
-        zoomControlOptions: { position: 9 }, // 줌 컨트롤 우하단에 배치
-      };
-      mapRef.current = new naver.maps.Map(
-        'map',
-        mapOptions
-      );
-      
-      // 현재 위치 마커 표시
-      createMarker(mapRef, currentMyLocation, { url: markerOpts[0], });
 
-      // 마커 및 정보창 생성
-      for (let i = 0; i < data.length; i++) {
-        const marker = createMarker(mapRef, data[i], { url: markerOpts[data[i].type], });
-        createInfoWindow(mapRef, marker, data[i]);
-        markersRef.push(marker);
-        //markers.push(marker);
+  var filterState = 0;
+  var isVisible = [];
+
+  // 마커 필터링 이벤트
+  const handleFilter = (e) => {
+    const type = Number(e.target.id);
+
+    if ((filterState >> type) & 1) filterState &= ~(1 << type);
+    else filterState |= 1 << type;
+
+    console.log(type, filterState);
+
+    filterMarkers(filterState, data, isVisible);
+    updateMarkers(mapRef.current, markers, isVisible);
+  }
+
+  const MapWrapper = () => {
+    
+    useEffect(() => {
+      if (currentMyLocation.lat !== 0 && currentMyLocation.lng !== 0) {
+        const mapOptions = {
+          center: new naver.maps.LatLng(currentMyLocation.lat, currentMyLocation.lng),  // 지도의 초기 중심 좌표
+          logoControl: false,     // 네이버 로고 표시 X
+          mapDataControl: false,  // 지도 데이터 저작권 컨트롤 표시 X
+          scaleControl: true,     // 지도 축척 컨트롤의 표시 여부
+          tileDuration: 200,      // 지도 타일을 전환할 때 페이드 인 효과의 지속 시간(밀리초)
+          zoom: 17,               // 지도의 초기 줌 레벨
+          zoomControl: true,      // 줌 컨트롤 표시
+          zoomControlOptions: { position: 9 }, // 줌 컨트롤 우하단에 배치
+        };
+        mapRef.current = new naver.maps.Map(
+          'map',
+          mapOptions
+        );
+        
+        // 현재 위치 마커 표시
+        createMarker(mapRef, currentMyLocation, { url: markerOpts[0], });
+
+        // 마커 및 정보창 생성
+        for (let i = 0; i < data.length; i++) {
+          const marker = createMarker(mapRef, data[i], { url: markerOpts[data[i].type], });
+          createInfoWindow(mapRef, marker, data[i]);
+          markers.push(marker);
+          isVisible.push(true);
+        }
+
+        // 지도 줌 인/아웃 시 마커 업데이트 이벤트 핸들러
+        naver.maps.Event.addListener(mapRef.current, "zoom_changed", () => {
+          if (mapRef.current !== null) {
+            updateMarkers(mapRef.current, markers, isVisible);
+          }
+        });
+
+        // 지도 드래그 시 마커 업데이트 이벤트 핸들러
+        naver.maps.Event.addListener(mapRef.current, "dragend", () => {
+          if (mapRef.current !== null) {
+            updateMarkers(mapRef.current, markers, isVisible);
+          }
+        });
+
+        mapRef.current.setCenter(naver.maps.LatLng(currentMyLocation.lat, currentMyLocation.lng));
+        updateMarkers(mapRef.current, markers, isVisible);
       }
+    }, [currentMyLocation]);
+  }
 
-      // 마커 필터링 이벤트
-      filterMarkers(filter, markersRef, markers);
-
-
-      // 지도 줌 인/아웃 시 마커 업데이트 이벤트 핸들러
-      naver.maps.Event.addListener(mapRef.current, "zoom_changed", () => {
-        if (mapRef.current !== null) {
-          updateMarkers(mapRef.current, markers);
-        }
-      });
-
-      // 지도 드래그 시 마커 업데이트 이벤트 핸들러
-      naver.maps.Event.addListener(mapRef.current, "dragend", () => {
-        if (mapRef.current !== null) {
-          updateMarkers(mapRef.current, markers);
-        }
-      });
-
-      mapRef.current.setCenter(naver.maps.LatLng(currentMyLocation.lat, currentMyLocation.lng));
-      updateMarkers(mapRef.current, markers);
-    }
-  }, [currentMyLocation]);
-}
-
-function FullScreenMap() {
   return (
     <>
       <PanelHeader size="sm" />
@@ -92,8 +102,10 @@ function FullScreenMap() {
             <Card>
               <CardHeader>
                 <div className="maps-filter">
+                  {/* <button className="active active-pro" id="1" onClick={handleFilter}>편의점</button> */}
                   <a
                     className="btn btn-round btn-primary"
+                    id="1" onClick={handleFilter}
                   >
                     편의점
                     {/* 쓰레기통 */}
@@ -101,6 +113,7 @@ function FullScreenMap() {
                   <a> </a>
                   <a
                     className="btn btn-round btn-warning"
+                    id="2" onClick={handleFilter}
                   >
                     음식점
                     {/* 분리수거시설 */}
@@ -108,6 +121,7 @@ function FullScreenMap() {
                   <a> </a>
                   <a
                     className="btn btn-round btn-info"
+                    id="3" onClick={handleFilter}
                   >
                     카페
                     {/* 의류수거함 */}

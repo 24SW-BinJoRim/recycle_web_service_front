@@ -61,13 +61,13 @@ var dashRoutes = [
   //   component: <Notifications />,
   //   layout: "/admin",
   // },
-  // {
-  //   path: "/extended-tables",
-  //   name: "Table List",
-  //   icon: "files_paper",
-  //   component: <TableList />,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/extended-tables",
+    name: "Table List",
+    icon: "files_paper",
+    component: <TableList />,
+    layout: "/admin",
+  },
   {
     path: "/user-page",
     name: "User Profile",

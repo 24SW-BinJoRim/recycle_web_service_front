@@ -53,30 +53,37 @@ const hideMarker = (marker) => {
 };
 
 // 마커 렌더링 함수
-export const updateMarkers = (map, markers) => {
+export const updateMarkers = (map, markers, isVisible) => {
   const mapBounds = map.getBounds();
 
   for (let i = 0; i < markers.length; i += 1) {
-    const position = markers[i].getPosition();
+    if (isVisible[i]) {
+      const position = markers[i].getPosition();
 
-    if (mapBounds.hasLatLng(position)) {
-      showMarker(map, markers[i]);
-    } else {
-      hideMarker(markers[i]);
+      if (mapBounds.hasLatLng(position)) {
+        showMarker(map, markers[i]);
+      } else {
+        hideMarker(markers[i]);
+      }
     }
+    else hideMarker(markers[i]);
   }
 };
 
 const ALL = 63;
 
 // 마커 필터링 함수
-export const filterMarkers = (filter, markersRef, markers) => {
-  
-  // 필터 미적용 시, 전체 마커 표시
-  if (filter == 0) filter = ALL;
+export const filterMarkers = (filterState, data, isVisible) => {
 
-  for (let i = 0; i < markersRef.length; i += 1) {
-    if (filter >> markersRef[i].type) 
-      markers.push(markersRef[i]);
+  // 필터 미적용 시, 전체 마커 표시
+  if (filterState == 0) filterState = ALL;
+
+  for (let i = 0; i < data.length; i+= 1) {
+    if ((filterState >> data[i].type) & 1) {
+      isVisible[i] = true;
+    }
+    else {
+      isVisible[i] = false;
+    }
   }
 }
