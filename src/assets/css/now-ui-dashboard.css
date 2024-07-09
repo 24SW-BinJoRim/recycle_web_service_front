@@ -4684,13 +4684,3 @@ Created using IcoMoon - icomoon.io
 
 #tables .table-responsive {
   margin-bottom: 30px; }
-
-.btn-filter {
-  background-color: #fff;
-  border: 1px solid #dbdee2;
-  color: #404a5c;
-}
-.btn-filter.active {
-  background-color: #505bf0;
-  color: #fff;
-}

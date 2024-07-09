@@ -30,19 +30,6 @@ function FullScreenMap() {
   var filterState = 0;
   var isVisible = [];
 
-  // 마커 필터링 이벤트
-  const handleFilter = (e) => {
-    const type = Number(e.target.id);
-
-    if ((filterState >> type) & 1) filterState &= ~(1 << type);
-    else filterState |= 1 << type;
-
-    console.log(type, filterState);
-
-    filterMarkers(filterState, data, isVisible);
-    updateMarkers(mapRef.current, markers, isVisible);
-  }
-
   const MapWrapper = () => {
     
     useEffect(() => {
@@ -93,6 +80,37 @@ function FullScreenMap() {
     }, [currentMyLocation]);
   }
 
+  const Button = ({ id, name, className }) => {
+    const [clicked, setClicked] = useState(false);
+    // const onClick = () => setClicked(!clicked);
+
+    // 마커 필터링 이벤트
+    const onClick = (e) => {
+      const type = Number(e.target.id);
+  
+      if ((filterState >> type) & 1) filterState &= ~(1 << type);
+      else filterState |= 1 << type;
+  
+      // console.log(type, filterState);
+  
+      filterMarkers(filterState, data, isVisible);
+      updateMarkers(mapRef.current, markers, isVisible);
+      setClicked(!clicked);
+    }
+
+    return (
+        <div
+            className={
+                "btn btn-round " + (clicked ? className : "")
+            }
+            id = {id}
+            onClick={onClick}
+        >
+            {name}
+        </div>
+    );
+}
+
   return (
     <>
       <PanelHeader size="sm" />
@@ -103,36 +121,13 @@ function FullScreenMap() {
               <CardHeader>
                 <div className="maps-filter">
                   {/* <button className="active active-pro" id="1" onClick={handleFilter}>편의점</button> */}
-                  <a
-                    className="btn btn-round btn-primary"
-                    id="1" onClick={handleFilter}
-                  >
-                    편의점
-                    {/* 쓰레기통 */}
-                  </a>
+                  <Button id="1" name="쓰레기통" className="btn-primary"/>
                   <a> </a>
-                  <a
-                    className="btn btn-round btn-warning"
-                    id="2" onClick={handleFilter}
-                  >
-                    음식점
-                    {/* 분리수거시설 */}
-                  </a>
+                  <Button id="2" name="분리수거시설" className="btn-warning"/>
                   <a> </a>
-                  <a
-                    className="btn btn-round btn-info"
-                    id="3" onClick={handleFilter}
-                  >
-                    카페
-                    {/* 의류수거함 */}
-                  </a>
+                  <Button id="3" name="의류수거함" className="btn-info"/>
                   <a> </a>
-                  <a
-                    className="btn btn-round" //btn-success"
-                  >
-                    기타
-                    {/* 녹색가게 */}
-                  </a>
+                  <Button id="4" name="녹색가게" className="btn-success"/>
                 </div>
               </CardHeader>
               <CardBody>
