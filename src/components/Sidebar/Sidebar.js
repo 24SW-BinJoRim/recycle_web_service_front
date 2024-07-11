@@ -62,7 +62,7 @@ function Sidebar(props) {
         </a>
         <a
           //href="https://www.creative-tim.com?ref=nudr-sidebar"
-          href={'/admin/testmaps'}
+          href={'/admin/maps'}
           className="simple-text logo-normal"
           //target="_blank"
         >

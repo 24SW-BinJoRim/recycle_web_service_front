@@ -24,6 +24,9 @@ import Maps from "views/Maps.js";
 import TestMaps from "views/TestMaps.js";
 import Upgrade from "views/Upgrade.js";
 import UserPage from "views/UserPage.js";
+import TestTableList from "views/TestTableList.js";
+import InfoBoard from "views/InfoBoard";
+import UsedBoard from "views/UsedBoard";
 
 var dashRoutes = [
   // {
@@ -41,11 +44,11 @@ var dashRoutes = [
   //   layout: "/admin",
   // },
   {
-    path: "/testmaps",
+    path: "/maps",
     name: "Maps",
     icon: "location_map-big",
     component: <TestMaps />,
-    layout: "/admin",
+    layout: "/eoditsseu",
   },
   // {
   //   path: "/maps",
@@ -62,18 +65,25 @@ var dashRoutes = [
   //   layout: "/admin",
   // },
   {
-    path: "/extended-tables",
-    name: "Table List",
+    path: "/info-board",
+    name: "information",
     icon: "files_paper",
-    component: <TableList />,
-    layout: "/admin",
+    component: <InfoBoard />,
+    layout: "/eoditsseu",
+  },
+  {
+    path: "/used-board",
+    name: "used transaction",
+    icon: "shopping_bag-16",
+    component: <UsedBoard />,
+    layout: "/eoditsseu",
   },
   {
     path: "/user-page",
     name: "User Profile",
     icon: "users_single-02",
     component: <UserPage />,
-    layout: "/admin",
+    layout: "/eoditsseu",
   },
   // {
   //   path: "/typography",

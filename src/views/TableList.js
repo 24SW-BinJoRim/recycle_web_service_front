@@ -80,7 +80,7 @@ function RegularTables() {
               </CardBody>
             </Card>
           </Col>
-          <Col xs={12}>
+          {/* <Col xs={12}>
             <Card className="card-plain">
               <CardHeader>
                 <CardTitle tag="h4">Table on Plain Background</CardTitle>
@@ -121,7 +121,7 @@ function RegularTables() {
                 </Table>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       </div>
     </>

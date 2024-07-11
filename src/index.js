@@ -30,8 +30,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/admin/*" element={<AdminLayout />} />
-      <Route path="*" element={<Navigate to="/admin/testmaps" replace />} />
+      <Route path="/eoditsseu/*" element={<AdminLayout />} />
+      <Route path="*" element={<Navigate to="/eoditsseu/maps" replace />} />
     </Routes>
   </BrowserRouter>
 );
