@@ -10,6 +10,10 @@ import {
     // Table,
     Row,
     Col,
+    InputGroup,
+    InputGroupText,
+    InputGroupAddon,
+    Input,
 } from "reactstrap";
   
 // core components
@@ -23,18 +27,6 @@ const TableWrapper = () => {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    	// fetch("/itemList").then(
-      //     response => response.json()
-      //   ).then(
-      //     data => {
-      //       // 받아온 데이터를 data 변수에 update
-      //       setData(data.itemList);
-      //       console.log(data.itemList[0]['name']);
-      //       console.log(Object.keys(data.itemList));
-      //     }
-      //   ).catch(
-      //     (err) => console.log(err)
-      //   )
       setData(loadTableData());
   }, [])
 
@@ -55,22 +47,35 @@ const RegularTables = () => {
 
   return (
       <>
-      <PanelHeader size="sm" />
-      <div className="content">
-          <Row>
-          <Col xs={12}>
-              <Card>
-              <CardHeader>
-                  <Row>
-                  <Col>
-                      <CardTitle tag="h4">Information Board</CardTitle>
-                  </Col>
-                  </Row>
-              </CardHeader>
-              <CardBody>
-                  <TableWrapper />
-              </CardBody>
-              </Card>
+      <PanelHeader size="sm"/>
+      <div className="content" style={{ marginTop: '-100px', paddingBottom: '0px' }}>
+        <Row>
+        <Col xs={12}>
+            <Card>
+            <CardHeader>
+                <Row>
+                <Col>
+                    <CardTitle tag="h4">Information Board</CardTitle>
+                </Col>
+                <Col md="4">
+                  <form>
+                    <InputGroup className="no-border float-right"
+                      style={{ marginTop: '10px' }}>
+                      <Input placeholder="Search..." />
+                      <InputGroupAddon addonType="append">
+                        <InputGroupText>
+                          <i className="now-ui-icons ui-1_zoom-bold" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </form>
+                </Col>
+                </Row>
+            </CardHeader>
+            <CardBody>
+                <TableWrapper />
+            </CardBody>
+            </Card>
           </Col>
           </Row>
       </div>

@@ -23,9 +23,10 @@ import PropTypes from "prop-types";
 
 function Footer(props) {
   return (
-    <footer className={"footer" + (props.default ? " footer-default" : "")}>
+    <footer className={"footer" + (props.default ? " footer-default" : "")}
+      style={{ paddingTop: '0px' }}>
       <Container fluid={props.fluid ? true : false}>
-        <nav>
+        {/* <nav>
           <ul>
             <li>
               <a
@@ -52,7 +53,7 @@ function Footer(props) {
               </a>
             </li>
           </ul>
-        </nav>
+        </nav> */}
         <div className="copyright">
           &copy; {1900 + new Date().getYear()}, Designed by{" "}
           <a

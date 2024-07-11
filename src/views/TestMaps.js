@@ -10,7 +10,7 @@ import PanelHeader from "components/PanelHeader/PanelHeader.js";
 import { useEffect, useRef, useState } from "react";
 import useGeolocation from "hooks/useGeolocation";
 import { createMarker, createInfoWindow, updateMarkers, filterMarkers } from "util/Markers";
-import { loadData } from "util/Data";
+import { loadData, loadLocationData } from "util/Data";
 
 // marker options
 import user_marker from "assets/img/maps_user_marker_nav_32.png";
@@ -23,7 +23,7 @@ function FullScreenMap() {
   const { naver } = window;
   const { currentMyLocation } = useGeolocation();
   
-  const data = loadData();
+  const data = loadLocationData();
   const markers = [];
   const markerOpts = [ user_marker, marker_orange, marker_yellow, marker_blue ];
 
@@ -114,7 +114,7 @@ function FullScreenMap() {
   return (
     <>
       <PanelHeader size="sm" />
-      <div className="content">
+      <div className="content" style={{ marginTop: '-100px', paddingBottom: '3px' }}>
         <Row>
           <Col xs={12}>
             <Card>
@@ -134,7 +134,7 @@ function FullScreenMap() {
                 <div
                   id="map"
                   className="map"
-                  style={{ position: "relative", overflow: "hidden" }}
+                  style={{ position: "relative", overflow: "hidden", height: '570px' }}
                 >
                   <MapWrapper />
                 </div>

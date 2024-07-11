@@ -60,7 +60,7 @@ function Admin(props) {
     <div className="wrapper">
       <Sidebar {...props} routes={routes} backgroundColor={backgroundColor} />
       <div className="main-panel" ref={mainPanel}>
-        <DemoNavbar {...props} />
+        {/* <DemoNavbar {...props} /> */}
         <Routes>
           {routes.map((prop, key) => {
             return (
@@ -77,7 +77,7 @@ function Admin(props) {
             element={<Navigate to="/admin/maps" replace />}
           />
         </Routes>
-        {/* <Footer fluid /> */}
+        <Footer fluid />
       </div>
       {/* <FixedPlugin
         bgColor={backgroundColor}

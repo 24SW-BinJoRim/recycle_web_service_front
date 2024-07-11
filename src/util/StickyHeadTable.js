@@ -45,7 +45,7 @@ const columns = [
 
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(7);
+  const [rowsPerPage, setRowsPerPage] = React.useState(8);
 
   const rows = props.data;
 
@@ -59,8 +59,8 @@ export default function StickyHeadTable(props) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', }}>
+      <TableContainer sx={{ maxHeight: 518 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -107,6 +107,11 @@ export default function StickyHeadTable(props) {
         onRowsPerPageChange={handleChangeRowsPerPage}
         showFirstButton={true}
         showLastButton={true}
+        sx={{
+          '.MuiTablePagination-displayedRows': {
+            marginTop: '15px',
+          },
+        }}
       />
     </Paper>
   );

@@ -12,6 +12,10 @@ import {
     // Table,
     Row,
     Col,
+    InputGroup,
+    InputGroupText,
+    InputGroupAddon,
+    Input,
 } from "reactstrap";
   
 // core components
@@ -26,18 +30,6 @@ const TableWrapper = () => {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    	// fetch("/itemList").then(
-      //     response => response.json()
-      //   ).then(
-      //     data => {
-      //       // 받아온 데이터를 data 변수에 update
-      //       setData(data.itemList);
-      //       console.log(data.itemList[0]['name']);
-      //       console.log(Object.keys(data.itemList));
-      //     }
-      //   ).catch(
-      //     (err) => console.log(err)
-      //   )
       setData(loadTableData());
   }, [])
 
@@ -74,10 +66,10 @@ const Editor = () => {
   };
 
   const saveBoard = async () => {
-    await axios.post(`//localhost:8080/board`, board).then((res) => {
-      alert('등록되었습니다.');
-      navigate('/board');
-    });
+    // await axios.post(`//localhost:8080/board`, board).then((res) => {
+    //   alert('등록되었습니다.');
+    //   navigate('/board');
+    // });
   };
 
   const backToList = () => {
@@ -112,10 +104,10 @@ const Editor = () => {
         ></textarea>
       </div>
       <br />
-      <div>
+      {/* <div>
         <button onClick={saveBoard}>저장</button>
         <button onClick={backToList}>취소</button>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -131,8 +123,8 @@ const RegularTables = () => {
         return (
             <>
             <PanelHeader size="sm" />
-            <div className="content">
-                <Row>
+            <div className="content" style={{ marginTop: '-100px', paddingBottom: '0px' }}>
+                <Row sx={{ maxHeight: 518 }}>
                 <Col xs={12}>
                     <Card>
                     <CardHeader>
@@ -140,7 +132,20 @@ const RegularTables = () => {
                         <Col>
                             <CardTitle tag="h4">Used-Transaction Board</CardTitle>
                         </Col>
-                        <Col>
+                        <Col md="4">
+                          <form>
+                            <InputGroup className="no-border float-right"
+                              style={{ marginTop: '10px' }}>
+                              <Input placeholder="Search..." />
+                              <InputGroupAddon addonType="append">
+                                <InputGroupText>
+                                  <i className="now-ui-icons ui-1_zoom-bold" />
+                                </InputGroupText>
+                              </InputGroupAddon>
+                            </InputGroup>
+                          </form>
+                        </Col>
+                        <Col md="fit" style={{ marginRight: '15px' }}>
                             <div
                                 className="btn btn-round btn-info float-right"
                                 onClick={onClick}
@@ -164,7 +169,7 @@ const RegularTables = () => {
         return (
             <>
             <PanelHeader size="sm" />
-            <div className="content">
+            <div className="content" style={{ marginTop: '-100px', paddingBottom: '0px' }}>
                 <Row>
                 <Col xs={12}>
                     <Card>

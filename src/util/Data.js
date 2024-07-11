@@ -1,4 +1,21 @@
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+
 export const loadData = () => {
+    const [data, setData] = useState([]);
+ 
+    useEffect(() => {
+        axios.get('/eoditsseu/api/maps')
+        .then(response => setData(response.data))
+        .catch(error => console.log(error))
+    }, []);
+
+    console.log(data);
+
+    return data;
+}
+
+export const loadLocationData = () => {
     var data = data_convenience;
     data = data.concat(data_restaurant);
     data = data.concat(data_cafe);

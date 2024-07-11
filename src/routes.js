@@ -100,15 +100,14 @@ var dashRoutes = [
   //   icon: "objects_spaceship",
   //   component: <Upgrade />,
   //   layout: "/admin",
+  // },  
+  // {
+  //   path: "/app",
+  //   name: "TEST PROXY",
+  //   icon: "files_paper",
+  //   component: <App />,
+  //   layout: "/eoditsseu",
   // },
-  
-  {
-    path: "/app",
-    name: "TEST PROXY",
-    icon: "files_paper",
-    component: <App />,
-    layout: "/eoditsseu",
-  },
 ];
 
 export default dashRoutes;
