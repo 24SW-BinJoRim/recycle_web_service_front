@@ -27,6 +27,7 @@ import UserPage from "views/UserPage.js";
 import TestTableList from "views/TestTableList.js";
 import InfoBoard from "views/InfoBoard";
 import UsedBoard from "views/UsedBoard";
+import App from "App";
 
 var dashRoutes = [
   // {
@@ -100,6 +101,14 @@ var dashRoutes = [
   //   component: <Upgrade />,
   //   layout: "/admin",
   // },
+  
+  {
+    path: "/app",
+    name: "TEST PROXY",
+    icon: "files_paper",
+    component: <App />,
+    layout: "/eoditsseu",
+  },
 ];
 
 export default dashRoutes;
