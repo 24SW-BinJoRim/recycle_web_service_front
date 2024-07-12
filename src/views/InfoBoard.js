@@ -23,27 +23,17 @@ import Table from "util/StickyHeadTable";
 import { loadTableData } from "util/Data";
 
 const TableWrapper = () => {
-  const [page, setPage] = useState(1);
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
       setData(loadTableData());
   }, [])
 
-  return (
-    <div>
-      { (typeof data === 'undefined') ? (
-        // fetch가 완료되지 않았을 경우에 대한 처리
-        <p>loding...</p>
-      ) : (
-        // 호출할 테이블 컴포넌트 (수정)
-        <Table data={data}></Table>
-      )}
-    </div>
-  );
+  return <RegularTables data={data}/>;
 }
 
-const RegularTables = () => {
+const RegularTables = (props) => {
+  const data = props.data;
 
   return (
       <>
@@ -73,7 +63,15 @@ const RegularTables = () => {
                 </Row>
             </CardHeader>
             <CardBody>
-                <TableWrapper />
+              <div>
+                { (typeof data === 'undefined') ? (
+                  // fetch가 완료되지 않았을 경우에 대한 처리
+                  <p>loding...</p>
+                ) : (
+                  // 호출할 테이블 컴포넌트 (수정)
+                  <Table data={data}></Table>
+                )}
+              </div>
             </CardBody>
             </Card>
           </Col>
@@ -84,7 +82,7 @@ const RegularTables = () => {
 }
 
 function InfoBoard() {
-    return RegularTables();
+    return TableWrapper();
 }
 
 export default InfoBoard;

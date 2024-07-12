@@ -7,37 +7,40 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useLocation, Link } from 'react-router-dom';
 
 const columns = [
-  // { id: 'no', 
-  //   label: 'NO.', 
-  //   minWidth: 5,
-  // },
+  { id: 'id', 
+    label: 'NO.', 
+    minWidth: 10,
+    align: 'center',
+  },
   {
     id: 'title',
     label: 'TITLE',
     minWidth: 200,
     // align: 'right',
     format: (value) => value.toLocaleString('en-US'),
+    isLink: true,
   },
   {
     id: 'user_id',
     label: 'WRITER',
-    minWidth: 50,
+    minWidth: 10,
     align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   },
   {
     id: 'createdAt',
     label: 'DATE',
-    minWidth: 50,
+    minWidth: 10,
     align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   },
   {
     id: 'likes',
     label: 'LIKES',
-    minWidth: 50,
+    minWidth: 10,
     align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   },
@@ -46,6 +49,7 @@ const columns = [
 export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const location = useLocation();
 
   const rows = props.data;
 
@@ -85,9 +89,17 @@ export default function StickyHeadTable(props) {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {column.isLink ? (
+                            <Link 
+                              to={`${location.pathname}/${row.id}`} 
+                              state={{ rowData: row }}
+                              onClick={() => console.log(row)}
+                              style={{ textDecoration: 'none', color: 'inherit' }}>
+                              {column.format && typeof value === 'number' ? column.format(value) : value}
+                            </Link>
+                          ) : (
+                            column.format && typeof value === 'number' ? column.format(value) : value
+                          )}
                         </TableCell>
                       );
                     })}

@@ -27,6 +27,8 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import BoardDetail from "views/BoardDetail.js";
+import BoardEditor from "views/BoardEditor";
 
 import routes from "routes.js";
 
@@ -73,8 +75,20 @@ function Admin(props) {
             );
           })}
           <Route
-            path="/admin"
-            element={<Navigate to="/admin/maps" replace />}
+            path="/eoditsseu"
+            element={<Navigate to="/eoditsseu/maps" replace />}
+          />
+          <Route
+            path="/info-board/:idx"
+            element={<BoardDetail />}
+          />
+          <Route
+            path="/used-board/editor"
+            element={<BoardEditor />}
+          />
+          <Route
+            path="/used-board/:idx"
+            element={<BoardDetail />}
           />
         </Routes>
         <Footer fluid />
