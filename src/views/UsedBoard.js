@@ -22,7 +22,7 @@ import {
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
 import Table from "util/StickyHeadTable";
-import { loadTableData } from "util/Data";
+import { loadUsedData } from "util/Data";
 import BoardEditor from "views/BoardEditor";
 
 const TableWrapper = () => {
@@ -31,7 +31,7 @@ const TableWrapper = () => {
   console.log("UsedBoard: TableWrapper is called.")
 
   useEffect(() => {
-      setData(loadTableData());
+      setData(loadUsedData());
   }, [])
 
   return <RegularTables data={data}/>;
@@ -101,18 +101,7 @@ const RegularTables = (props) => {
 }
 
 function UsedBoard() {
-    return (
-      <Routes>
-        <Route
-            path="/"
-            element={<TableWrapper />}
-        />
-        <Route
-            path="/editor"
-            element={<BoardEditor />}
-        />
-      </Routes>
-    )
+    return TableWrapper();
 }
 
 export default UsedBoard;

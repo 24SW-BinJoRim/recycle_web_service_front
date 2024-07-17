@@ -29,6 +29,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import BoardDetail from "views/BoardDetail.js";
 import BoardEditor from "views/BoardEditor";
+import BoardRoute from "views/BoardRoute";
 
 import routes from "routes.js";
 
@@ -80,7 +81,7 @@ function Admin(props) {
           />
           <Route
             path="/info-board/:idx"
-            element={<BoardDetail />}
+            element={<BoardRoute />}
           />
           <Route
             path="/used-board/editor"

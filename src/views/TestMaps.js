@@ -2,7 +2,17 @@
 import React from "react";
 
 // reactstrap components
-import { Row, Col, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Row,
+  Col,
+  InputGroup,
+  InputGroupText,
+  InputGroupAddon,
+  Input,
+} from "reactstrap";
 
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
@@ -119,16 +129,33 @@ function FullScreenMap() {
           <Col xs={12}>
             <Card>
               <CardHeader>
-                <div className="maps-filter">
-                  {/* <button className="active active-pro" id="1" onClick={handleFilter}>편의점</button> */}
-                  <Button id="1" name="쓰레기통" className="btn-primary"/>
-                  <a> </a>
-                  <Button id="2" name="분리수거시설" className="btn-warning"/>
-                  <a> </a>
-                  <Button id="3" name="의류수거함" className="btn-info"/>
-                  <a> </a>
-                  <Button id="4" name="녹색가게" className="btn-success"/>
-                </div>
+              <Row>
+                <Col>
+                  <div className="maps-filter">
+                    {/* <button className="active active-pro" id="1" onClick={handleFilter}>편의점</button> */}
+                    <Button id="1" name="쓰레기통" className="btn-primary"/>
+                    <a> </a>
+                    <Button id="2" name="분리수거시설" className="btn-warning"/>
+                    <a> </a>
+                    <Button id="3" name="의류수거함" className="btn-info"/>
+                    <a> </a>
+                    <Button id="4" name="녹색가게" className="btn-success"/>
+                  </div>
+                </Col>
+                <Col md="4">
+                    <form>
+                      <InputGroup className="no-border float-right"
+                        style={{ marginTop: '10px' }}>
+                        <Input placeholder="Search..." />
+                        <InputGroupAddon addonType="append">
+                          <InputGroupText>
+                            <i className="now-ui-icons ui-1_zoom-bold" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                      </InputGroup>
+                    </form>
+                </Col>
+                </Row>
               </CardHeader>
               <CardBody>
                 <div

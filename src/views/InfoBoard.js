@@ -20,13 +20,13 @@ import {
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
 import Table from "util/StickyHeadTable";
-import { loadTableData } from "util/Data";
+import { loadInfoData } from "util/Data";
 
 const TableWrapper = () => {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-      setData(loadTableData());
+      setData(loadInfoData());
   }, [])
 
   return <RegularTables data={data}/>;
