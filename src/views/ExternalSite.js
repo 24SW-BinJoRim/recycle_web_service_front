@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-function ExternalSite() {
+function ExternalSite({rowData}) {
     const location = useLocation();
-    const rowData = location.state?.rowData;
+    // const rowData = location.state?.rowData;
 
     return (
     <div style={{ width: '100%', height: '100vh' }}>

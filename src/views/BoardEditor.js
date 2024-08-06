@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -20,6 +21,9 @@ import PanelHeader from "components/PanelHeader/PanelHeader.js";
 import { Component } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
 
 class EditorComponent extends Component{
     constructor(props){
@@ -65,77 +69,46 @@ class EditorComponent extends Component{
     }
 }
 
-// const Editor = () => {
-//     const navigate = useNavigate();
-  
-//     const [board, setBoard] = useState({
-//       title: '',
-//       createdBy: '',
-//       contents: '',
-//     });
-  
-//     const { title, createdBy, contents } = board; //비구조화 할당
-  
-//     const onChange = (event) => {
-//       const { value, name } = event.target; //event.target에서 name과 value만 가져오기
-//       setBoard({
-//         ...board,
-//         [name]: value,
-//       });
-//     };
-  
-//     const saveBoard = async () => {
-//       // await axios.post(`//localhost:8080/board`, board).then((res) => {
-//       //   alert('등록되었습니다.');
-//       //   navigate('/board');
-//       // });
-//     };
-  
-//     const backToList = () => {
-//       navigate('/board');
-//     };
-  
-//     return (
-//       <div>
-//         <div>
-//           <span>제목</span>
-//           <input type="text" name="title" value={title} onChange={onChange} />
-//         </div>
-//         <br />
-//         <div>
-//           <span>작성자</span>
-//           <input
-//             type="text"
-//             name="createdBy"
-//             value={createdBy}
-//             onChange={onChange}
-//           />
-//         </div>
-//         <br />
-//         <div>
-//           <span>내용</span>
-//           <textarea
-//             name="contents"
-//             cols="30"
-//             rows="10"
-//             value={contents}
-//             onChange={onChange}
-//           ></textarea>
-//         </div>
-//         <br />
-//         {/* <div>
-//           <button onClick={saveBoard}>저장</button>
-//           <button onClick={backToList}>취소</button>
-//         </div> */}
-//       </div>
-//     );
-//   };
-
 function BoardEditor() {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const currentUser = useSelector(selectCurrentUser);
+  const currentUserID = isAuthenticated ? currentUser.userid : -1;
+  const currentUsername = isAuthenticated ? currentUsername : "사용자";
+
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  function onEditorChange(value) {
-      setDesc(value)
+  const [contents, setContents] = useState('');
+
+  const postData = (to, data) => {
+    axios.post(to, data)
+    .then(response => console.log(response.data))
+    .catch(error => console.log(error))
+  };  
+
+  const handleEditSubmit = () => {
+    if (title === '') {
+        alert('제목을 입력해주세요.');
+        return;
+    }
+    if (contents === '') {
+        alert('내용을 입력해주세요.');
+        return;
+    }
+
+    const currentDate = new Date().toISOString().slice(0, 10);
+    const data = {
+        id: null, 
+        user_id: currentUserID, 
+        username: currentUsername, 
+        createdAt: currentDate, 
+        updatedAt: '', 
+        likes: 0, 
+        title: title,
+        contents: contents
+    };
+    console.log("BoardEditor: ", data);
+    postData('/eoditsseu/api/used-transaction/submit', data);
+    navigate('/eoditsseu/used-board');
   }
 
   return (
@@ -165,7 +138,7 @@ function BoardEditor() {
                       <Col md="1">
                           <div
                               className="btn btn-round btn-info float-right"
-                              // onClick={onClick}
+                              onClick={() => handleEditSubmit()}
                           >
                               등록
                           </div>
@@ -179,12 +152,16 @@ function BoardEditor() {
                     type="text"
                     placeholder="제목"
                     className="form-control"
-                    onChange={(event) => setTitle(event.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     style={{ marginBottom: '10px', fontSize: '15px' }} // fontSize 추가
                   />
                 </div>
                 <div>
-                  <EditorComponent value={desc} onChange={onEditorChange} style={{ fontSize: '20px' }} />
+                  <EditorComponent 
+                    value={contents} 
+                    onChange={setContents} 
+                    style={{ fontSize: '20px' }} />
                 </div>
               </CardBody>
               </Card>

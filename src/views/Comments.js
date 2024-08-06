@@ -1,88 +1,102 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import axios from 'axios';
+
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
+
 import 'assets/css/Comments.css'; 
 
-import { loadCommentsData } from 'util/Data';
-
-// const Comment = ({ content, username, createdAt, updatedAt, currentUserID }) => {
-//   return (
-//     <div className="comment-container">
-//       <div className="comment-meta">
-//         <span className="comment-username">{username}</span>
-//         <div className="comment-dates">
-//           <span className="comment-date">{createdAt}</span>
-//           {updatedAt && <span className="comment-date">(수정됨: {updatedAt})</span>}
-//         </div>
-//         {comment.user_id === currentUserID && (
-//           <div>
-//             <button className="edit-button" onClick={() => handleEditComment(comment.id)}>수정</button>
-//             <div> | </div>
-//             <button className="delete-button" onClick={() => handleDeleteComment(comment.id)}>삭제</button>
-//           </div>
-//         )}
-//       </div>
-//       <div className="comment-content">{content}</div>
-//     </div>
-//   );
-// };
-
 function Comments() {
-  const [comments, setComments] = useState(loadCommentsData());
+  const location = useLocation();
+  const rowData = location.state?.rowData;
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const currentUser = useSelector(selectCurrentUser);
+  const currentUserID = isAuthenticated ? currentUser.userid : -1;
+  const currentUsername = isAuthenticated ? currentUser.username : "사용자";
+  
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedComment, setEditedComment] = useState('');
 
-  const currentUserID = 3;
+  useEffect(() => {
+    // board_id로 댓글 데이터 가져오도록 수정 (수정 필요)
+    // getData('/eoditsseu/api/comments/data/' + rowData.id);
+    getData('/eoditsseu/api/comments/data');
+  }, []); 
+
+  const getData = (from) => {
+    axios.get(from)
+    .then(response => setComments(response.data))
+    .catch(error => console.log(error))
+  }
+
+  const postData = (to, data) => {
+    axios.post(to, data)
+    .then(response => console.log(response.data))
+    .catch(error => console.log(error))
+  };
   
+  // 댓글 등록
   const handleCommentSubmit = (e) => {
     e.preventDefault();
+
+    if (!isAuthenticated) {
+      alert('로그인 후 댓글을 작성할 수 있습니다.');
+      return;
+    }
     
     if (newComment.trim() === '') return;
-
-    // 로그인 안되어있으면 기각 코드 추가
-
+    
     const currentDate = new Date().toISOString().slice(0, 10);
     const newCommentObject = {
-      id: comments.length + 1, 
+      id: comments.length + 1,  // id 임의 지정 (수정 필요)
       content: newComment,
-      username: '사용자',       // 사용자 정보 가져오는 코드로 수정
+      username: currentUsername,
       createdAt: currentDate,
       updatedAt: '',
       user_id: currentUserID,
+      board_id: rowData.id
     };
 
-    const updatedComments = [...comments, newCommentObject];
-    // 변경 사항 전송 코드 추가..
+    postData('/eoditsseu/api/comments/submit', newCommentObject);
+    const updatedComments = [...comments, newCommentObject];  // 데이터 리로드 해야 할 듯 (수정 필요)
 
     setComments(updatedComments);
     setNewComment(''); // 댓글 입력창 초기화
   };
 
+  // 댓글 수정
   const handleEditComment = (commentId, content) => {
     // 수정 상태로 변경
     setEditingCommentId(commentId);
     setEditedComment(content)
   };
 
+  // 댓글 수정 후 저장
   const handleSaveComment = (commentId, editedContent) => {
     const updatedComments = comments.map(comment =>
       comment.id === commentId ? { ...comment, content: editedContent, updatedAt: new Date().toISOString().slice(0, 10) } : comment
     );
     setComments(updatedComments);
-    // 변경 사항 전송 코드 추가..
+    postData('/eoditsseu/api/comments/edit', updatedComments.find(comment => comment.id === commentId));
 
     setEditingCommentId(null);
   };
 
   const handleDeleteComment = (commentId) => {
     console.log(`댓글 삭제 ID: ${commentId}`);
+    postData('/eoditsseu/api/comments/delete', comments.find(comment => comment.id === commentId));
+
+    // 리로드로 수정?
     const updatedComments = comments.filter(comment => comment.id !== commentId);
     setComments(updatedComments);
-    // 변경 사항 전송 코드 추가..
   };
 
   return (
     <div className="comments-section">
-      <h5>댓글</h5>
+      <h5>댓글({comments.length})</h5>
       {comments.map((comment, index) => (
         <div className="comment-container">
           <div className="comment-meta">

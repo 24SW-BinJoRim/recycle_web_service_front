@@ -28,6 +28,8 @@ import TestTableList from "views/TestTableList.js";
 import InfoBoard from "views/InfoBoard";
 import UsedBoard from "views/UsedBoard";
 import App from "App";
+import UserRoute from "views/UserRoute";
+import UserProfile from "views/UserProfile";
 
 var dashRoutes = [
   // {
@@ -46,7 +48,7 @@ var dashRoutes = [
   // },
   {
     path: "/maps",
-    name: "Maps",
+    name: "지도",
     icon: "location_map-big",
     component: <TestMaps />,
     layout: "/eoditsseu",
@@ -67,23 +69,23 @@ var dashRoutes = [
   // },
   {
     path: "/info-board",
-    name: "information",
+    name: "정보게시판",
     icon: "files_paper",
     component: <InfoBoard />,
     layout: "/eoditsseu",
   },
   {
     path: "/used-board",
-    name: "used transaction",
+    name: "중고거래",
     icon: "shopping_bag-16",
     component: <UsedBoard />,
     layout: "/eoditsseu",
   },
   {
     path: "/user-page",
-    name: "User Profile",
+    name: "마이페이지",
     icon: "users_single-02",
-    component: <UserPage />,
+    component: <UserProfile />,
     layout: "/eoditsseu",
   },
   // {
@@ -108,6 +110,14 @@ var dashRoutes = [
   //   component: <App />,
   //   layout: "/eoditsseu",
   // },
+  {
+    pro: true,
+    path: "/users",
+    name: "LOGIN",
+    icon: "",
+    component: <UserRoute />,
+    layout: "/eoditsseu",
+  },
 ];
 
 export default dashRoutes;

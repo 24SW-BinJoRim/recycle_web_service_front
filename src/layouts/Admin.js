@@ -30,9 +30,13 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import BoardDetail from "views/BoardDetail.js";
 import BoardEditor from "views/BoardEditor";
 import BoardRoute from "views/BoardRoute";
+import InfoBoard from "views/InfoBoard";
+import UsedBoard from "views/UsedBoard";
+import UserLogin from "views/UserLogin";
+import UserRegister from "views/UserRegister";
+import TestMaps from "views/TestMaps";
 
 import routes from "routes.js";
-
 var ps;
 
 function Admin(props) {
@@ -79,9 +83,26 @@ function Admin(props) {
             path="/eoditsseu"
             element={<Navigate to="/eoditsseu/maps" replace />}
           />
+
+          <Route
+            path="/maps/search/:keyword"
+            element={<TestMaps />}
+          />
+
+          {/* Information Board */}
+          <Route
+            path="/info-board/search/:keyword"
+            element={<InfoBoard />}
+          />
           <Route
             path="/info-board/:idx"
             element={<BoardRoute />}
+          />
+          
+          {/* Used-transaction Board */}
+          <Route
+            path="/used-board/search/:keyword"
+            element={<UsedBoard />}
           />
           <Route
             path="/used-board/editor"
@@ -89,8 +110,19 @@ function Admin(props) {
           />
           <Route
             path="/used-board/:idx"
-            element={<BoardDetail />}
+            element={<BoardRoute />}
           />
+
+          {/* User */}
+          <Route
+            path="/users/login"
+            element={<UserLogin />}
+          />
+          <Route
+            path="/users/signup"
+            element={<UserRegister />}
+          />
+          
         </Routes>
         <Footer fluid />
       </div>

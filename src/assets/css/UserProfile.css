@@ -1,0 +1,122 @@
+.user-profile {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+}
+
+.profile-header {
+display: flex;
+align-items: center;
+margin-bottom: 20px;
+background-color: #f0f0f0;
+padding: 20px;
+border-radius: 10px;
+}
+
+.profile-picture {
+width: 100px;
+height: 100px;
+border-radius: 50%;
+margin-right: 20px;
+object-fit: cover;
+}
+
+.profile-icon {
+font-size: 100px;
+color: gray;
+margin-right: 20px;
+}
+
+.profile-info {
+display: flex;
+flex-direction: column;
+}
+
+.profile-info h2 {
+margin: 0;
+font-size: 24px;
+font-weight: bold;
+}
+
+.profile-info p {
+margin: 5px 0 0;
+color: gray;
+}
+
+.profile-tabs {
+display: flex;
+justify-content: space-around;
+margin-bottom: 20px;
+}
+
+.profile-tabs button {
+padding: 10px 20px;
+border: none;
+background: none;
+cursor: pointer;
+font-size: 16px;
+font-weight: bold;
+color: gray;
+transition: color 0.3s, border-bottom 0.3s;
+}
+
+.profile-tabs button.active {
+color: black;
+border-bottom: 2px solid black;
+}
+
+.profile-content {
+border-top: 1px solid #e0e0e0;
+padding-top: 20px;
+}
+
+.user-posts, .user-comments, .user-likes {
+display: flex;
+flex-direction: column;
+}
+
+.post-item, .comment-item, .like-item {
+margin-bottom: 20px;
+padding: 10px;
+border: 1px solid #e0e0e0;
+border-radius: 8px;
+background: #f9f9f9;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.post-item:hover, .comment-item:hover, .like-item:hover {
+background-color: #e0e0e0;
+}
+
+.post-item h3, .like-item h3 {
+margin: 0 0 10px;
+font-size: 20px;
+}
+
+.post-item p, .comment-item p, .like-item p {
+margin: 0;
+color: #555;
+}
+
+.comment-item .post-title {
+color: gray;
+font-size: 14px;
+margin-top: 5px;
+}
+
+.loading-screen {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+background-color: #f5f5f5;
+}
+
+.loading-screen p {
+margin-top: 10px;
+font-size: 16px;
+color: #333;
+}
+  

@@ -17,88 +17,143 @@ import {
     InputGroupAddon,
     Input,
 } from "reactstrap";
+
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
   
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
 import Table from "util/StickyHeadTable";
-import { loadUsedData } from "util/Data";
-import BoardEditor from "views/BoardEditor";
 
 const TableWrapper = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [data, setData] = useState([{}]);
-
-  console.log("UsedBoard: TableWrapper is called.")
+  const location = useLocation();
+  const navigate = useNavigate();
+  const keyword = decodeURI(location.pathname.split('/').pop());
 
   useEffect(() => {
-      setData(loadUsedData());
-  }, [])
+    if (keyword && keyword !== 'used-board') {
+      const url = '/eoditsseu/api/used-transaction/search';
+      const requestData = { boardType: 'used-transaction', keyword: keyword };
+      postData(url, requestData);
+    } else {
+      getData('/eoditsseu/api/used-transaction/data');
+    }
+  }, [keyword]); 
 
-  return <RegularTables data={data}/>;
-}
+  const getData = async (from) => {
+    try {
+      const response = await axios.get(from);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-const RegularTables = (props) => {
-  const location = useLocation();
-  const data = props.data;
+  const postData = async (to, data) => {
+    try {
+      const response = await axios.post(to, data);
+      // console.log(response.data);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error in postData:', error);
+      throw error;
+    }
+  };
   
-  return (
-      <>
-      <PanelHeader size="sm" />
-      <div className="content" style={{ marginTop: '-100px', paddingBottom: '0px' }}>
-          <Row sx={{ maxHeight: 518 }}>
-          <Col xs={12}>
-              <Card>
-              <CardHeader>
-                  <Row>
-                  <Col>
-                      <CardTitle tag="h4">Used-Transaction Board</CardTitle>
-                  </Col>
-                  <Col md="4">
-                    <form>
+  const handleWriteClick = () => {
+    if (isAuthenticated) {
+      navigate(`/eoditsseu/used-board/editor`);
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  }
+
+  const RegularTables = () => {
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const navigate = useNavigate();
+  
+    const handleSearch = (keyword) => {
+      if (keyword === "" || keyword === undefined) return;
+      navigate(`/eoditsseu/used-board/search/${keyword}`);
+      setSearchKeyword(keyword);
+    }
+    
+    return (
+        <>
+        <PanelHeader size="sm" />
+        <div className="content" style={{ marginTop: '-100px', paddingBottom: '0px' }}>
+            <Row sx={{ maxHeight: 518 }}>
+            <Col xs={12}>
+                <Card>
+                <CardHeader>
+                    <Row>
+                    <Col>
+                        <CardTitle tag="h4">Used-Transaction Board</CardTitle>
+                    </Col>
+                    <Col md="4">
+                    <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
                       <InputGroup className="no-border float-right"
                         style={{ marginTop: '10px' }}>
-                        <Input placeholder="Search..." />
+                        { searchKeyword === ""
+                         ? <Input placeholder="Search..." value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)}/>
+                         : <Input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)}/>}
                         <InputGroupAddon addonType="append">
                           <InputGroupText>
-                            <i className="now-ui-icons ui-1_zoom-bold" />
+                            <button className="now-ui-icons ui-1_zoom-bold" 
+                              style={{ background: "none", border: "none"}}
+                              onClick={() => handleSearch(searchKeyword)}/>
                           </InputGroupText>
                         </InputGroupAddon>
                       </InputGroup>
                     </form>
-                  </Col>
-                  <Col md="fit" style={{ marginRight: '15px' }}>
-                    <Link 
-                      to={`/eoditsseu/used-board/editor`} 
-                      // onClick={()=> console.log(location.pathname)}
-                      style={{ textDecoration: 'none', color: 'inherit' }}>
+                    </Col>
+                    <Col md="fit" style={{ marginRight: '15px' }}>
+                      {/* <Link 
+                        to={`/eoditsseu/used-board/editor`} 
+                        // onClick={()=> console.log(location.pathname)}
+                        style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <div
+                            className="btn btn-round btn-info float-right"
+                            // onClick={onClick}
+                        >
+                            글쓰기
+                        </div>
+                      </Link> */}
                       <div
-                          className="btn btn-round btn-info float-right"
-                          // onClick={onClick}
+                        className="btn btn-round btn-info float-right"
+                        onClick={handleWriteClick} // Handle click here
                       >
-                          글쓰기
+                        글쓰기
                       </div>
-                    </Link>
-                  </Col>
-                  </Row>
-              </CardHeader>
-              <CardBody>
-                <div>
-                  { (typeof data === 'undefined') ? (
-                    // fetch가 완료되지 않았을 경우에 대한 처리
-                    <p>loding...</p>
-                  ) : (
-                    // 호출할 테이블 컴포넌트 (수정)
-                    <Table data={data}></Table>
-                  )}
-                </div>
-              </CardBody>
-              </Card>
-          </Col>
-          </Row>
-      </div>
-      </>
-  );
+                    </Col>
+                    </Row>
+                </CardHeader>
+                <CardBody>
+                  <div>
+                    { (typeof data === 'undefined') ? (
+                      // fetch가 완료되지 않았을 경우에 대한 처리
+                      <p>loding...</p>
+                    ) : (
+                      // 호출할 테이블 컴포넌트 (수정)
+                      <Table data={data}></Table>
+                    )}
+                  </div>
+                </CardBody>
+                </Card>
+            </Col>
+            </Row>
+        </div>
+        </>
+    );
+  }
+
+  return <RegularTables />;
 }
+
+
 
 function UsedBoard() {
     return TableWrapper();

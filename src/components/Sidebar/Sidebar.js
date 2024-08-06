@@ -1,35 +1,25 @@
-/*!
-
-=========================================================
-* Now UI Dashboard React - v1.5.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/now-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/now-ui-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Nav } from "reactstrap";
+
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
+
 // import logo from "logo-white.svg";
 import logo from "assets/img/logo_clover_white.png"
+
+import 'assets/css/User.css';
 
 var ps;
 
 function Sidebar(props) {
   const sidebar = React.useRef();
   const location = useLocation();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -73,16 +63,15 @@ function Sidebar(props) {
         <Nav>
           {props.routes.map((prop, key) => {
             if (prop.redirect) return null;
+            const itemClass = activeRoute(prop.layout + prop.path) + (prop.pro ? ' active active-pro login-button' : '');
+            if (prop.pro) {
+              if (isAuthenticated) prop.name = 'LOGOUT';
+              else prop.name = 'LOGIN';
+            }
             return (
-              <li
-                className={
-                  activeRoute(prop.layout + prop.path) +
-                  (prop.pro ? " active active-pro" : "")
-                }
-                key={key}
-              >
+              <li className={itemClass} key={key} style={{ fontSize: '19px' }}>
                 <NavLink to={prop.layout + prop.path} className="nav-link">
-                  <i className={"now-ui-icons " + prop.icon} />
+                  <i className={'now-ui-icons ' + prop.icon} />
                   <p>{prop.name}</p>
                 </NavLink>
               </li>

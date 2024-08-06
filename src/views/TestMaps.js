@@ -1,5 +1,7 @@
 
 import React from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -20,7 +22,7 @@ import PanelHeader from "components/PanelHeader/PanelHeader.js";
 import { useEffect, useRef, useState } from "react";
 import useGeolocation from "hooks/useGeolocation";
 import { createMarker, createInfoWindow, updateMarkers, filterMarkers } from "util/Markers";
-import { loadData, loadLocationData } from "util/Data";
+import { loadLocationData } from "util/Data";
 
 // marker options
 import user_marker from "assets/img/maps_user_marker_nav_32.png";
@@ -32,13 +34,66 @@ function FullScreenMap() {
   const mapRef = useRef(null);
   const { naver } = window;
   const { currentMyLocation } = useGeolocation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const keyword = decodeURI(location.pathname.split('/').pop());
   
-  const data = loadLocationData();
+  // const data = loadLocationData();
   const markers = [];
   const markerOpts = [ user_marker, marker_orange, marker_yellow, marker_blue ];
 
   var filterState = 0;
   var isVisible = [];
+   
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [data, setData] = useState([]);
+
+  const updateData = (newData) => {
+    const transformedData = newData.map(item => {
+      let newItem = { ...item };
+      if (newItem.type === "쓰레기통") newItem.type = 1;
+      else if (newItem.type === "분리수거시설") newItem.type = 2;
+      else if (newItem.type === "의류수거함") newItem.type = 3;
+      else if (newItem.type === "녹색가게") newItem.type = 4;
+      return newItem;
+    });
+
+    setData(transformedData);
+  };
+  
+  const getData = async (from) => {
+    try {
+      const response = await axios.get(from);
+      updateData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const postData = async (to, data) => {
+    try {
+      const response = await axios.post(to, data);
+      // return response.data;
+      updateData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error in postData:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    console.log("keyword:", keyword);
+    if (keyword && keyword !== 'maps') {
+      const url = '/eoditsseu/api/maps/search';
+      const requestData = { boardType: 'maps', keyword: keyword };
+      postData(url, requestData);
+    } else {
+      getData('/eoditsseu/api/maps');
+    }
+    // console.log('Maps: data: ', data);
+  }, [keyword]); 
 
   const MapWrapper = () => {
     
@@ -119,7 +174,14 @@ function FullScreenMap() {
             {name}
         </div>
     );
-}
+  }
+  
+  const handleSearch = (keyword) => {
+    if (keyword === "" || keyword === undefined) return;
+    console.log("navigate");
+    navigate(`/eoditsseu/maps/search/${keyword}`);
+    setSearchKeyword(keyword);
+  }
 
   return (
     <>
@@ -143,13 +205,17 @@ function FullScreenMap() {
                   </div>
                 </Col>
                 <Col md="4">
-                    <form>
+                    <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
                       <InputGroup className="no-border float-right"
                         style={{ marginTop: '10px' }}>
-                        <Input placeholder="Search..." />
+                        { searchKeyword === ""
+                         ? <Input placeholder="Search..." value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)}/>
+                         : <Input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)}/>}
                         <InputGroupAddon addonType="append">
                           <InputGroupText>
-                            <i className="now-ui-icons ui-1_zoom-bold" />
+                            <button className="now-ui-icons ui-1_zoom-bold" 
+                              style={{ background: "none", border: "none"}}
+                              onClick={() => handleSearch(searchKeyword)}/>
                           </InputGroupText>
                         </InputGroupAddon>
                       </InputGroup>

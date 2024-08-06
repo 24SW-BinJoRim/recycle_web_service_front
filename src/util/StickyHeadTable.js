@@ -24,7 +24,7 @@ const columns = [
     isLink: true,
   },
   {
-    id: 'user_id',
+    id: 'username',
     label: 'WRITER',
     minWidth: 10,
     align: 'center',
@@ -50,9 +50,9 @@ export default function StickyHeadTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const location = useLocation();
-
+  const boardType = location.pathname.includes('used-board') ? 'used-board' : 'info-board';
   const rows = props.data;
-
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -91,9 +91,9 @@ export default function StickyHeadTable(props) {
                         <TableCell key={column.id} align={column.align}>
                           {column.isLink ? (
                             <Link 
-                              to={`${location.pathname}/${row.id}`} 
-                              state={{ rowData: row }}
-                              onClick={() => console.log(row)}
+                              to={`/eoditsseu/${boardType}/${row.id}`} 
+                              // state={{ rowData: row }}
+                              // onClick={() => console.log(row)}
                               style={{ textDecoration: 'none', color: 'inherit' }}>
                               {column.format && typeof value === 'number' ? column.format(value) : value}
                             </Link>
