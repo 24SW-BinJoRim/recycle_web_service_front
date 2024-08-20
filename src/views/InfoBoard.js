@@ -9,7 +9,6 @@ import {
     CardBody,
     CardHeader,
     CardTitle,
-    // Table,
     Row,
     Col,
     InputGroup,
@@ -20,9 +19,7 @@ import {
   
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
-
 import Table from "util/StickyHeadTable";
-// import { loadInfoData } from "util/Data";
 
 const TableWrapper = () => {
   const [data, setData] = useState([{}]);
@@ -51,8 +48,6 @@ const TableWrapper = () => {
   const postData = async (to, data) => {
     try {
       const response = await axios.post(to, data);
-      // console.log(response.data);
-      // return response.data;
       setData(response.data);
     } catch (error) {
       console.error('Error in postData:', error);
@@ -60,8 +55,6 @@ const TableWrapper = () => {
     }
   };
   
-  // const data = loadInfoData('/eoditsseu/api/information');
-
   const RegularTables = () => {
     const [searchKeyword, setSearchKeyword] = useState("");
     const navigate = useNavigate();
@@ -109,9 +102,9 @@ const TableWrapper = () => {
                     // fetch가 완료되지 않았을 경우에 대한 처리
                     <p>loding...</p>
                   ) : (
-                    // 호출할 테이블 컴포넌트 (수정)
                     <Table data={data}></Table>
-                  )}
+                  )
+                  }
                 </div>
               </CardBody>
               </Card>

@@ -33,7 +33,7 @@ function UserRegister() {
     }
 
     const credentials = {
-      id: id,
+      userid: id,
       name: name,
       password: password,
     };

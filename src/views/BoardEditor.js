@@ -1,23 +1,19 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-// reactstrap components
 import {
     Card,
     CardBody,
     CardHeader,
     CardTitle,
-    // Table,
     Row,
     Col,
 } from "reactstrap";
   
-// core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
-// EditorComponent
 import { Component } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -126,7 +122,6 @@ function BoardEditor() {
                               style={{ textDecoration: 'none', color: 'inherit' }}>
                               <div
                                   className="btn float-left"
-                                  // onClick={onClick}
                               >
                                   취소
                               </div>
@@ -154,7 +149,7 @@ function BoardEditor() {
                     className="form-control"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    style={{ marginBottom: '10px', fontSize: '15px' }} // fontSize 추가
+                    style={{ marginBottom: '10px', fontSize: '15px' }}
                   />
                 </div>
                 <div>

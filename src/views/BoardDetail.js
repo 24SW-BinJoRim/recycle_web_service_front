@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import 'assets/css/BoardDetail.css'; 
 import axios from 'axios';
 
@@ -15,23 +15,12 @@ function BoardDetail({rowData}) {
   const currentUser = useSelector(selectCurrentUser);
 
   const location = useLocation();
-  // const rowData = location.state?.rowData;
   const currentUserID = isAuthenticated ? currentUser.userid : -1;
   const currentBoardId = location.pathname.split('/').pop();
 
   const [data, setData] = useState(rowData);
   const [likes, setLikes] = useState(rowData.likes);
   const [liked, setLiked] = useState(false);
-
-  // const getData = (from) => {
-  //   axios.get(from)
-  //   .then(response => {
-  //     // setData(response.data);
-  //     // setLikes(data.likes);
-  //     setLiked(isLiked(response.data.id, currentUserID));
-  //   })
-  //   .catch(error => console.log(error))
-  // }
 
   const postData = async (to, data) => {
     try {
@@ -87,7 +76,6 @@ function BoardDetail({rowData}) {
   return (
     <div className="post-container">
       <Link 
-          // to={`${location.pathname}`}  
           to={location.pathname.replace(/\/[^/]+$/, '')}
           style={{ textDecoration: 'none', color: 'inherit' }}>
         <button className="back-button">

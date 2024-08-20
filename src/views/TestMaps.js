@@ -3,7 +3,6 @@ import React from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from "axios";
 
-// reactstrap components
 import {
   Card,
   CardBody,
@@ -16,13 +15,11 @@ import {
   Input,
 } from "reactstrap";
 
-// core components
 import PanelHeader from "components/PanelHeader/PanelHeader.js";
 
 import { useEffect, useRef, useState } from "react";
 import useGeolocation from "hooks/useGeolocation";
 import { createMarker, createInfoWindow, updateMarkers, filterMarkers } from "util/Markers";
-import { loadLocationData } from "util/Data";
 
 // marker options
 import user_marker from "assets/img/maps_user_marker_nav_32.png";
@@ -38,7 +35,6 @@ function FullScreenMap() {
   const location = useLocation();
   const keyword = decodeURI(location.pathname.split('/').pop());
   
-  // const data = loadLocationData();
   const markers = [];
   const markerOpts = [ user_marker, marker_orange, marker_yellow, marker_blue ];
 
@@ -74,7 +70,6 @@ function FullScreenMap() {
   const postData = async (to, data) => {
     try {
       const response = await axios.post(to, data);
-      // return response.data;
       updateData(response.data);
       console.log(response.data);
     } catch (error) {
@@ -92,7 +87,6 @@ function FullScreenMap() {
     } else {
       getData('/eoditsseu/api/maps');
     }
-    // console.log('Maps: data: ', data);
   }, [keyword]); 
 
   const MapWrapper = () => {

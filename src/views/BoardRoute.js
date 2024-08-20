@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import axios from 'axios';
 
@@ -8,7 +8,6 @@ import BoardDetail from 'views/BoardDetail';
 
 function BoardRoute() {
   const location = useLocation();
-  // const rowData = location.state?.rowData;
   const currentBoardId = location.pathname.split('/').pop();  
 
   const [isUrl, setIsUrl] = useState(false);
@@ -20,7 +19,6 @@ function BoardRoute() {
       const response = await axios.get(from);
       setData(response.data);
       setIsUrl(isValidUrl(response.data.contents));
-      // console.log('BoardRoute: ', response.data);
     } catch (error) {
       console.log(error);
     } finally {

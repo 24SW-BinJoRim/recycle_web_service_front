@@ -9,7 +9,6 @@ import {
     CardBody,
     CardHeader,
     CardTitle,
-    // Table,
     Row,
     Col,
     InputGroup,
@@ -55,7 +54,6 @@ const TableWrapper = () => {
   const postData = async (to, data) => {
     try {
       const response = await axios.post(to, data);
-      // console.log(response.data);
       setData(response.data);
     } catch (error) {
       console.error('Error in postData:', error);
@@ -111,17 +109,6 @@ const TableWrapper = () => {
                     </form>
                     </Col>
                     <Col md="fit" style={{ marginRight: '15px' }}>
-                      {/* <Link 
-                        to={`/eoditsseu/used-board/editor`} 
-                        // onClick={()=> console.log(location.pathname)}
-                        style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <div
-                            className="btn btn-round btn-info float-right"
-                            // onClick={onClick}
-                        >
-                            글쓰기
-                        </div>
-                      </Link> */}
                       <div
                         className="btn btn-round btn-info float-right"
                         onClick={handleWriteClick} // Handle click here
@@ -137,7 +124,6 @@ const TableWrapper = () => {
                       // fetch가 완료되지 않았을 경우에 대한 처리
                       <p>loding...</p>
                     ) : (
-                      // 호출할 테이블 컴포넌트 (수정)
                       <Table data={data}></Table>
                     )}
                   </div>

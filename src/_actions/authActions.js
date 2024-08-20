@@ -24,7 +24,6 @@ export const login = (data) => {
 
 export const logout = () => {
   return (dispatch) => {
-    // Perform logout logic (e.g., remove token from storage)
     dispatch({ type: LOGOUT });
   };
 };

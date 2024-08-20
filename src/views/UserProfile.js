@@ -18,16 +18,23 @@ const UserProfile = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentUser = useSelector(selectCurrentUser);
 
-  const getData = (from, setData) => {
-    axios.get(from)
-    .then(response => setData(response.data))
-    .catch(error => console.log(error))
-  }
-  
-  const postData = (to, data) => {
-    axios.post(to, data)
-    .then(response => console.log(response.data))
-    .catch(error => console.log(error))
+  const getData = async (from, setData) => {
+    try {
+      const response = await axios.get(from);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const postData = async (to, data, setData) => {
+    try {
+      const response = await axios.post(to, data);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error in postData:', error);
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -37,9 +44,10 @@ const UserProfile = () => {
       return;
     }
 
-    getData(`/eoditsseu/api/userpage/posts/${currentUser.userid}`, setPosts);
-    getData(`/eoditsseu/api/userpage/comments/${currentUser.userid}`, setComments);
-    getData(`/eoditsseu/api/userpage/likes/${currentUser.userid}`, setLikes);
+    const requestData = { userid: currentUser.userid, username: currentUser.username };
+    postData(`/eoditsseu/api/userpage/posts`, requestData, setPosts);
+    postData(`/eoditsseu/api/userpage/comments`, requestData, setComments);
+    postData(`/eoditsseu/api/userpage/likes`, requestData, setLikes);
   }, [isAuthenticated, navigate]);
 
   if (!currentUser) {
@@ -50,12 +58,6 @@ const UserProfile = () => {
       </div>
     );
   }
-
-  const userProfile = {
-    profilePicture: null,
-    username: "John Doe",
-    userId: "john_doe",
-  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -107,15 +109,20 @@ const UserPosts = (data) => {
   console.log('UserPosts: ', data);
   return (
     <div className="user-posts">
-      {posts.map(post => (
-        <div key={post.id} className="post-item" onClick={() => {
-          const boardType = post.type === 'used-transaction' ? 'used-board' : 'info-board';
-          navigate(`/eoditsseu/${boardType}/${post.postId}`)
-        }}>
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-        </div>
-      ))}
+      { (typeof posts === 'undefined') ? (
+          // fetch가 완료되지 않았을 경우에 대한 처리
+          <p>loding...</p>
+      ) : (
+        posts.map(post => (
+          <div key={post.id} className="post-item" onClick={() => {
+            const boardType = post.type === 'used-transaction' ? 'used-board' : 'info-board';
+            navigate(`/eoditsseu/${boardType}/${post.postId}`)
+          }}>
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 };
@@ -126,7 +133,11 @@ const UserComments = (data) => {
   console.log('UserComments: ', data);
   return (
     <div className="user-comments">
-      {comments.map(comment => (
+    { (typeof comments === 'undefined') ? (
+        // fetch가 완료되지 않았을 경우에 대한 처리
+        <p>loding...</p>
+    ) : (
+      comments.map(comment => (
         <div key={comment.id} className="comment-item" onClick={() => {
           const boardType = comment.type === 'used-transaction' ? 'used-board' : 'info-board';
           navigate(`/eoditsseu/${boardType}/${comment.postId}`)
@@ -134,7 +145,8 @@ const UserComments = (data) => {
           <p>{comment.content}</p>
           <p className="post-title">on {comment.postTitle}</p>
         </div>
-      ))}
+      ))
+    )}
     </div>
   );
 };
@@ -145,7 +157,11 @@ const UserLikes = (data) => {
   console.log('UserLikes: ', data);
   return (
     <div className="user-likes">
-      {likes.map(like => (
+    { (typeof likes === 'undefined') ? (
+        // fetch가 완료되지 않았을 경우에 대한 처리
+        <p>loding...</p>
+    ) : (
+      likes.map(like => (
         <div key={like.id} className="like-item" onClick={() => {
           const boardType = like.type === 'used-transaction' ? 'used-board' : 'info-board';
           navigate(`/eoditsseu/${boardType}/${like.postId}`)
@@ -153,7 +169,8 @@ const UserLikes = (data) => {
           <h3>{like.title}</h3>
           <p>{like.content}</p>
         </div>
-      ))}
+      ))
+    )}
     </div>
   );
 };
