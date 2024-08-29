@@ -95,7 +95,7 @@ function BoardEditor() {
     const data = {
         id: null, 
         user_id: currentUserID, 
-        username: currentUsername, 
+        nickname: currentUsername, 
         createdAt: currentDate, 
         updatedAt: '', 
         likes: 0, 

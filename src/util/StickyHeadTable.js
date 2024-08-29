@@ -80,7 +80,21 @@ export default function StickyHeadTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            { (rows.length === 0) ? (
+              <TableRow>
+              <TableCell colSpan={columns.length}>
+                <p style={{
+                  textAlign: 'center',
+                  fontSize: '1.5rem',
+                  margin: 0,
+                  padding: '50px 0',
+                }}>
+                  검색 결과가 없습니다.
+                </p>
+              </TableCell>
+              </TableRow>
+            ) : (
+              rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
@@ -105,7 +119,8 @@ export default function StickyHeadTable(props) {
                     })}
                   </TableRow>
                 );
-              })}
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>

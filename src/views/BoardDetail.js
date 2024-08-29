@@ -25,7 +25,7 @@ function BoardDetail({rowData}) {
   const postData = async (to, data) => {
     try {
       const response = await axios.post(to, data);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error in postData:', error);
@@ -68,8 +68,15 @@ function BoardDetail({rowData}) {
   };
 
   const handleShare = () => {
-    // 링크가 "/info-board/search/:keyword/:idx" 이런 식인 경우 처리해야 함
-    navigator.clipboard.writeText(window.location.href);
+    var href = window.location.href;
+    var parts = href.split('/');
+    
+    if (parts.includes("search")) {
+      parts.splice(-2, 2);
+      href = parts.join('/') + "/" + currentBoardId;
+    }
+    
+    navigator.clipboard.writeText(href);
     alert('링크가 복사되었습니다.');
   };
 
@@ -86,7 +93,7 @@ function BoardDetail({rowData}) {
       <div className="post-header">
         <h1 className="post-title">{data.title}</h1>
         <div className="post-meta">
-          <span className="post-author">글쓴이: {data.username}</span>
+          <span className="post-author">글쓴이: {data.nickname}</span>
           <span className="post-date">작성일자: {data.createdAt}</span>
           {data.updatedAt && <span className="post-date">수정일자: {data.updatedAt}</span>}
         </div>
@@ -101,7 +108,7 @@ function BoardDetail({rowData}) {
           <FaShareAlt /> 공유하기
         </button>
       </div>
-      <Comments />
+      <Comments data={data}/>
     </div>
   );
 }

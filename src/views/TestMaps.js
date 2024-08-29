@@ -61,7 +61,7 @@ function FullScreenMap() {
     try {
       const response = await axios.get(from);
       updateData(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -71,7 +71,7 @@ function FullScreenMap() {
     try {
       const response = await axios.post(to, data);
       updateData(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error('Error in postData:', error);
       throw error;
@@ -79,7 +79,7 @@ function FullScreenMap() {
   };
 
   useEffect(() => {
-    console.log("keyword:", keyword);
+    // console.log("keyword:", keyword);
     if (keyword && keyword !== 'maps') {
       const url = '/eoditsseu/api/maps/search';
       const requestData = { boardType: 'maps', keyword: keyword };
@@ -172,7 +172,7 @@ function FullScreenMap() {
   
   const handleSearch = (keyword) => {
     if (keyword === "" || keyword === undefined) return;
-    console.log("navigate");
+    // console.log("navigate");
     navigate(`/eoditsseu/maps/search/${keyword}`);
     setSearchKeyword(keyword);
   }

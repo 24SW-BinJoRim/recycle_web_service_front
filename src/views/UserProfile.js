@@ -44,7 +44,8 @@ const UserProfile = () => {
       return;
     }
 
-    const requestData = { userid: currentUser.userid, username: currentUser.username };
+    const requestData = { userid: currentUser.userid, nickname: currentUser.nickname };
+    
     postData(`/eoditsseu/api/userpage/posts`, requestData, setPosts);
     postData(`/eoditsseu/api/userpage/comments`, requestData, setComments);
     postData(`/eoditsseu/api/userpage/likes`, requestData, setLikes);
@@ -81,7 +82,7 @@ const UserProfile = () => {
           <FaUser className="profile-icon" />
         )}
         <div className="profile-info">
-          <h2>{currentUser.username}</h2>
+          <h2>{currentUser.nickname}</h2>
           <p>ID: {currentUser.userid}</p>
         </div>
       </div>
@@ -106,12 +107,18 @@ const UserProfile = () => {
 const UserPosts = (data) => {
   const posts = data.posts;
   const navigate = data.navigate;
-  console.log('UserPosts: ', data);
+  // console.log('UserPosts: ', data);
   return (
     <div className="user-posts">
-      { (typeof posts === 'undefined') ? (
-          // fetch가 완료되지 않았을 경우에 대한 처리
-          <p>loding...</p>
+      { (posts.length === 0) ? (
+        <p style={{
+          textAlign: 'center',
+          fontSize: '1.5rem',
+          margin: 0,
+          padding: '50px 0',
+        }}>
+          작성한 게시글이 없습니다.
+        </p>
       ) : (
         posts.map(post => (
           <div key={post.id} className="post-item" onClick={() => {
@@ -130,12 +137,18 @@ const UserPosts = (data) => {
 const UserComments = (data) => {
   const comments = data.comments;
   const navigate = data.navigate;
-  console.log('UserComments: ', data);
+  // console.log('UserComments: ', data);
   return (
     <div className="user-comments">
-    { (typeof comments === 'undefined') ? (
-        // fetch가 완료되지 않았을 경우에 대한 처리
-        <p>loding...</p>
+    { (comments.length === 0) ? (
+        <p style={{
+          textAlign: 'center',
+          fontSize: '1.5rem',
+          margin: 0,
+          padding: '50px 0',
+        }}>
+          작성한 댓글이 없습니다.
+        </p>
     ) : (
       comments.map(comment => (
         <div key={comment.id} className="comment-item" onClick={() => {
@@ -154,12 +167,18 @@ const UserComments = (data) => {
 const UserLikes = (data) => {
   const likes = data.likes;
   const navigate = data.navigate;
-  console.log('UserLikes: ', data);
+  // console.log('UserLikes: ', data);
   return (
     <div className="user-likes">
-    { (typeof likes === 'undefined') ? (
-        // fetch가 완료되지 않았을 경우에 대한 처리
-        <p>loding...</p>
+    { (likes.length === 0) ? (
+      <p style={{
+        textAlign: 'center',
+        fontSize: '1.5rem',
+        margin: 0,
+        padding: '50px 0',
+      }}>
+        좋아요 한 게시글이 없습니다.
+      </p>
     ) : (
       likes.map(like => (
         <div key={like.id} className="like-item" onClick={() => {

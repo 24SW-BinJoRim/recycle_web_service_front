@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import { useSelector } from 'react-redux';
@@ -7,9 +6,8 @@ import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
 
 import 'assets/css/Comments.css'; 
 
-function Comments() {
-  const location = useLocation();
-  const rowData = location.state?.rowData;
+function Comments(props) {
+  const data = props.data;
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentUser = useSelector(selectCurrentUser);
   const currentUserID = isAuthenticated ? currentUser.userid : -1;
@@ -21,9 +19,8 @@ function Comments() {
   const [editedComment, setEditedComment] = useState('');
 
   useEffect(() => {
-    // board_id로 댓글 데이터 가져오도록 수정 (수정 필요)
-    // getData('/eoditsseu/api/comments/data/' + rowData.id);
-    getData('/eoditsseu/api/comments/data');
+    postCommentsData();
+    
   }, []); 
 
   const getData = (from) => {
@@ -32,9 +29,23 @@ function Comments() {
     .catch(error => console.log(error))
   }
 
+  const postCommentsData = () => {
+    const boardType = location.pathname.includes('used-board') ? 'used-transaction' : 'information';
+    
+    const request = {
+      board_id : data.id,
+      type : boardType,
+    }
+
+    axios.post('/eoditsseu/api/comments/data', request)
+    .then(response => setComments(response.data))
+    .catch(error => console.log(error))
+  }
+
   const postData = (to, data) => {
     axios.post(to, data)
-    .then(response => console.log(response.data))
+    // .then(response => console.log(response.data))
+    .then()
     .catch(error => console.log(error))
   };
   
@@ -51,17 +62,20 @@ function Comments() {
     
     const currentDate = new Date().toISOString().slice(0, 10);
     const newCommentObject = {
-      id: comments.length + 1,  // id 임의 지정 (수정 필요)
+      id: comments.length + 1,  // id 임의 지정
       content: newComment,
-      username: currentUsername,
+      nickname: currentUsername,
       createdAt: currentDate,
       updatedAt: '',
       user_id: currentUserID,
-      board_id: rowData.id
+      board_id: data.id
     };
 
     postData('/eoditsseu/api/comments/submit', newCommentObject);
-    const updatedComments = [...comments, newCommentObject];  // 데이터 리로드 해야 할 듯 (수정 필요)
+    const updatedComments = [...comments, newCommentObject]; 
+
+    // 데이터 리로드
+    postCommentsData();
 
     setComments(updatedComments);
     setNewComment(''); // 댓글 입력창 초기화
@@ -89,7 +103,6 @@ function Comments() {
     console.log(`댓글 삭제 ID: ${commentId}`);
     postData('/eoditsseu/api/comments/delete', comments.find(comment => comment.id === commentId));
 
-    // 리로드로 수정?
     const updatedComments = comments.filter(comment => comment.id !== commentId);
     setComments(updatedComments);
   };
@@ -100,7 +113,7 @@ function Comments() {
       {comments.map((comment, index) => (
         <div className="comment-container">
           <div className="comment-meta">
-            <span className="comment-username">{comment.username}</span>
+            <span className="comment-username">{comment.nickname}</span>
             <div className="comment-options">
               <span className="comment-date">{comment.createdAt}</span>
               {comment.updatedAt && <span className="comment-date">(수정됨: {comment.updatedAt})</span>}

@@ -101,6 +101,8 @@ const TableWrapper = () => {
                   { (typeof data === 'undefined') ? (
                     // fetch가 완료되지 않았을 경우에 대한 처리
                     <p>loding...</p>
+                    // {/* { (data.length === 0) ? (
+                    //   <p>검색 결과가 없습니다.</p> */}
                   ) : (
                     <Table data={data}></Table>
                   )
