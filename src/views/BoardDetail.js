@@ -17,6 +17,7 @@ function BoardDetail({rowData}) {
   const location = useLocation();
   const currentUserID = isAuthenticated ? currentUser.userid : -1;
   const currentBoardId = location.pathname.split('/').pop();
+  const boardType = location.pathname.includes('used-board') ? 'used-transaction' : 'information';
 
   const [data, setData] = useState(rowData);
   const [likes, setLikes] = useState(rowData.likes);
@@ -36,9 +37,8 @@ function BoardDetail({rowData}) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const boardType = location.pathname.includes('used-board') ? 'used-transaction' : 'information';
         const url = '/eoditsseu/api/likes/liked';
-        const requestData = { boardType: boardType, boardId: currentBoardId, usedId: currentUserID };
+        const requestData = { board_type: boardType, board_id: currentBoardId, userid: currentUserID };
         const responseData = await postData(url, requestData);
         
         if (responseData === true) setLiked(true)
@@ -56,7 +56,7 @@ function BoardDetail({rowData}) {
       return;
     }
     
-    const data = { id: null, board_id: currentBoardId, used_id: currentUserID };
+    const data = { board_type: boardType, board_id: currentBoardId, userid: currentUserID };
     if (liked) {
       setLikes(likes - 1);
       postData('/eoditsseu/api/likes/submit', data);

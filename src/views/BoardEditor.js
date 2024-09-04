@@ -69,7 +69,8 @@ function BoardEditor() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentUser = useSelector(selectCurrentUser);
   const currentUserID = isAuthenticated ? currentUser.userid : -1;
-  const currentUsername = isAuthenticated ? currentUsername : "사용자";
+  const currentUsername = isAuthenticated ? currentUser.username : "user";
+  const currentNickname = isAuthenticated ? currentUser.nickname : "사용자";
 
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -94,8 +95,9 @@ function BoardEditor() {
     const currentDate = new Date().toISOString().slice(0, 10);
     const data = {
         id: null, 
-        user_id: currentUserID, 
-        nickname: currentUsername, 
+        userid: currentUserID, 
+        username: currentUsername,
+        nickname: currentNickname, 
         createdAt: currentDate, 
         updatedAt: '', 
         likes: 0, 

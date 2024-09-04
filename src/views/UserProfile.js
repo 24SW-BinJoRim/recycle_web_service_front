@@ -44,7 +44,7 @@ const UserProfile = () => {
       return;
     }
 
-    const requestData = { userid: currentUser.userid, nickname: currentUser.nickname };
+    const requestData = { userid: currentUser.userid, username: currentUser.username };
     
     postData(`/eoditsseu/api/userpage/posts`, requestData, setPosts);
     postData(`/eoditsseu/api/userpage/comments`, requestData, setComments);
@@ -83,7 +83,7 @@ const UserProfile = () => {
         )}
         <div className="profile-info">
           <h2>{currentUser.nickname}</h2>
-          <p>ID: {currentUser.userid}</p>
+          <p>ID: {currentUser.username}</p>
         </div>
       </div>
       <div className="profile-tabs">

@@ -25,7 +25,7 @@ function UserLogin() {
     e.preventDefault();
     
     const credentials = {
-      userid: id,
+      username: id,
       password: password,
     };
 

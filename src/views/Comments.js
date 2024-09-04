@@ -11,7 +11,9 @@ function Comments(props) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentUser = useSelector(selectCurrentUser);
   const currentUserID = isAuthenticated ? currentUser.userid : -1;
-  const currentUsername = isAuthenticated ? currentUser.username : "사용자";
+  const currentUsername = isAuthenticated ? currentUser.username : "user";
+  const currentNickname = isAuthenticated ? currentUser.nickname : "사용자";
+  const boardType = location.pathname.includes('used-board') ? 'used-transaction' : 'information';
   
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -30,7 +32,6 @@ function Comments(props) {
   }
 
   const postCommentsData = () => {
-    const boardType = location.pathname.includes('used-board') ? 'used-transaction' : 'information';
     
     const request = {
       board_id : data.id,
@@ -64,11 +65,13 @@ function Comments(props) {
     const newCommentObject = {
       id: comments.length + 1,  // id 임의 지정
       content: newComment,
-      nickname: currentUsername,
+      username: currentUsername,
+      nickname: currentNickname,
       createdAt: currentDate,
       updatedAt: '',
-      user_id: currentUserID,
-      board_id: data.id
+      userid: currentUserID,
+      board_id: data.id,
+      boardType: boardType
     };
 
     postData('/eoditsseu/api/comments/submit', newCommentObject);
@@ -117,7 +120,7 @@ function Comments(props) {
             <div className="comment-options">
               <span className="comment-date">{comment.createdAt}</span>
               {comment.updatedAt && <span className="comment-date">(수정됨: {comment.updatedAt})</span>}
-              {comment.user_id === currentUserID && (
+              {comment.userid === currentUserID && (
                 <div className="comment-buttons">
                   {editingCommentId === comment.id ? (
                     <>

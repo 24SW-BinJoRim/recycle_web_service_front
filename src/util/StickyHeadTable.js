@@ -24,7 +24,7 @@ const columns = [
     isLink: true,
   },
   {
-    id: 'username',
+    id: 'nickname',
     label: 'WRITER',
     minWidth: 10,
     align: 'center',
