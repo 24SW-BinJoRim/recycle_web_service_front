@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import axios from 'axios';
+import api from '../api';
 
 import ExternalSite from 'views/ExternalSite';
 import BoardDetail from 'views/BoardDetail';
@@ -16,7 +17,7 @@ function BoardRoute() {
   
   const getData = async (from) => {
     try {
-      const response = await axios.get(from);
+      const response = await api.get(from);
       setData(response.data);
       setIsUrl(isValidUrl(response.data.contents));
     } catch (error) {

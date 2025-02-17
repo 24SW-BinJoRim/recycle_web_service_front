@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import api from '../api';
 
 import {
     Card,
@@ -76,10 +77,19 @@ function BoardEditor() {
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
 
-  const postData = (to, data) => {
-    axios.post(to, data)
-    .then(response => console.log(response.data))
-    .catch(error => console.log(error))
+//   const postData = (to, data) => {
+//     axios.post(to, data)
+//     .then(response => console.log(response.data))
+//     .catch(error => console.log(error))
+//   };  
+
+  const postData = async (to, data) => {
+    try {
+      const response = await api.post(to, data);  // ✅ api.js를 사용하여 EC2로 요청
+      console.log(response.data);
+    } catch (error) {
+      console.error("API 요청 실패:", error.response ? error.response.data : error.message);
+    }
   };  
 
   const handleEditSubmit = () => {

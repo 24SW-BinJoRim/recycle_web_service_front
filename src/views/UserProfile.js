@@ -3,6 +3,7 @@ import { FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
+import api from '../api';
 
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
@@ -20,7 +21,7 @@ const UserProfile = () => {
 
   const getData = async (from, setData) => {
     try {
-      const response = await axios.get(from);
+      const response = await api.get(from);
       setData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -29,7 +30,7 @@ const UserProfile = () => {
 
   const postData = async (to, data, setData) => {
     try {
-      const response = await axios.post(to, data);
+      const response = await api.post(to, data);
       setData(response.data);
     } catch (error) {
       console.error('Error in postData:', error);

@@ -1,4 +1,5 @@
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -12,7 +13,7 @@ export const login = (data) => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     try {
-      const response = await axios.post('/eoditsseu/api/users/login', data);
+      const response = await api.post('/eoditsseu/api/users/login', data);
       dispatch({ type: LOGIN_SUCCESS, payload: response.data });
       return response.data;
     } catch (error) {
@@ -32,7 +33,7 @@ export const register = (data) => {
   return async (dispatch) => {
     dispatch({ type: REGISTER_REQUEST });
     try {
-      const response = await axios.post('/eoditsseu/api/users/register', data);
+      const response = await api.post('/eoditsseu/api/users/register', data);
       dispatch({ type: REGISTER_SUCCESS, payload: response.data });
       return response.data;
     } catch (error) {

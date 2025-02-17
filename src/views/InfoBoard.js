@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from "axios";
+import api from '../api';
 
 // reactstrap components
 import {
@@ -38,7 +39,7 @@ const TableWrapper = () => {
 
   const getData = async (from) => {
     try {
-      const response = await axios.get(from);
+      const response = await api.get(from);
       setData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -47,7 +48,7 @@ const TableWrapper = () => {
 
   const postData = async (to, data) => {
     try {
-      const response = await axios.post(to, data);
+      const response = await api.post(to, data);
       setData(response.data);
     } catch (error) {
       console.error('Error in postData:', error);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import api from '../api';
 
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectCurrentUser } from '_selectors/selectors';
@@ -26,7 +27,7 @@ function Comments(props) {
   }, []); 
 
   const getData = (from) => {
-    axios.get(from)
+    api.get(from)
     .then(response => setComments(response.data))
     .catch(error => console.log(error))
   }
@@ -38,13 +39,13 @@ function Comments(props) {
       type : boardType,
     }
 
-    axios.post('/eoditsseu/api/comments/data', request)
+    api.post('/eoditsseu/api/comments/data', request)
     .then(response => setComments(response.data))
     .catch(error => console.log(error))
   }
 
   const postData = (to, data) => {
-    axios.post(to, data)
+    api.post(to, data)
     // .then(response => console.log(response.data))
     .then()
     .catch(error => console.log(error))

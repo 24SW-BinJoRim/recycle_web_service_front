@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import 'assets/css/BoardDetail.css'; 
 import axios from 'axios';
+import api from '../api';
 
 import { FaHeart, FaShareAlt, FaArrowLeft } from 'react-icons/fa';
 
@@ -25,7 +26,7 @@ function BoardDetail({rowData}) {
 
   const postData = async (to, data) => {
     try {
-      const response = await axios.post(to, data);
+      const response = await api.post(to, data);
       // console.log(response.data);
       return response.data;
     } catch (error) {
